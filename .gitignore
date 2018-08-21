@@ -243,3 +243,8 @@ ModelManifest.xml
 /kuZEDFaceDetectionTest/Models
 /kuZEDFaceDetectionTest/shape_predictor_68_face_landmarks.dat
 /kuZEDFaceDetectionTest/shape_predictor_5_face_landmarks.dat
+/kuZEDFaceDetectionTest/ZEDSDK_x64.props
+/kuZEDFaceDetectionTest/OpenCV_x64.props
+/kuZEDFaceDetectionTest/Dlib_x64.props
+/kuZEDFaceDetectionTest/CUDA_x64d.props
+/kuZEDFaceDetectionTest/CUDA_x64.props
