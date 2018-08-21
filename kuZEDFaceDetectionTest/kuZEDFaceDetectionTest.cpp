@@ -2,12 +2,9 @@
 #include <iostream>
 
 #include <sl/Camera.hpp>
-#include <dlib/opencv.h>
-#include <dlib/image_processing.h>
-#include <dlib/image_processing/frontal_face_detector.h>
 #include <opencv2/opencv.hpp>
 
-#define ResizeScale		  7
+#define ResizeScale		  1
 #define SearchRegionScale 0.2
 
 cv::Mat slMat2cvMat(sl::Mat &input) {
@@ -48,24 +45,21 @@ void main()
 
 	std::cout << "Resolution: (" << imageSize.width << " x " << imageSize.height << ")" << std::endl;
 
-	// 原來這樣cv::mat指標會直接指向sl::mat的資料
 	sl::Mat colorImgZED(imageSize.width, imageSize.height, sl::MAT_TYPE_8U_C4);
 	cv::Mat	colorImgCV = slMat2cvMat(colorImgZED);
 	cv::Mat colorImgCVQuarter;
 	cv::Mat grayImgCVQuarter;
 
-	std::vector<cv::Rect>	faces;
 	std::chrono::high_resolution_clock::time_point timeStamp[2];
 
 	timeStamp[0] = std::chrono::high_resolution_clock::now();
 
-	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
-	dlib::shape_predictor pose_model;
-	dlib::deserialize("shape_predictor_5_face_landmarks.dat") >> pose_model;
-
 	int frameCnt = 0;
 	float cummulativeFPS = 0;
 	float averageFPS;
+
+	cv::CascadeClassifier faceCascadeHaar;
+	faceCascadeHaar.load("Models/haarcascade_frontalface_alt.xml");
 
 	while (true)
 	{
@@ -82,54 +76,42 @@ void main()
 
 			cv::resize(colorImgCV, colorImgCVQuarter, cv::Size(scale * colorImgCV.cols, scale * colorImgCV.rows));
 			cv::Mat colorImgCVQuarterBGR;
-			//cv::cvtColor(colorImgCVQuarter, colorImgCVQuarterBGR, CV_BGRA2BGR);
-			//dlib::cv_image<dlib::bgr_pixel> imgQuarter_dlib(colorImgCVQuarterBGR);
 			cv::cvtColor(colorImgCVQuarter, grayImgCVQuarter, CV_BGRA2GRAY);
-			dlib::cv_image<uchar> imgQuarter_dlib(grayImgCVQuarter);
+			//cv::equalizeHist(grayImgCVQuarter, grayImgCVQuarter);
 
-			// Detect faces 
-			std::vector<dlib::rectangle> faces = detector(imgQuarter_dlib);
-
-			if (faces.size() != 0)
+			std::vector<cv::Rect> detectedFaces;
+			faceCascadeHaar.detectMultiScale(grayImgCVQuarter, detectedFaces, 1.1, 1, 0, cv::Size(300, 300));
+			
+			if (detectedFaces.size() != 0)
 			{
-				cv::Point2f tlCorner = cv::Point2f(ResizeScale * (float)faces[0].left(), ResizeScale * (float)faces[0].top());
-				cv::Point2f brCorner = cv::Point2f(ResizeScale * (float)faces[0].right(), ResizeScale * (float)faces[0].bottom());
+				int largestAreaIdx = 0;
+				int largestArea = 0;
 
-				int originalFaceWidth  = (int)abs(faces[0].left() - faces[0].right());
-				int originalFaceHeight = (int)abs(faces[0].top() - faces[0].bottom());
-
-				float l = faces[0].left() - SearchRegionScale * originalFaceWidth;
-				float t = faces[0].top() - SearchRegionScale * originalFaceHeight;
-				float r = faces[0].right() + SearchRegionScale * originalFaceWidth;
-				float b = faces[0].bottom() + SearchRegionScale * originalFaceHeight;
-
-				dlib::rectangle searchROI((long)l, (long)t, (long)r, (long)b);
-
-				cv::Point2f searchROITlCorner = cv::Point2f(ResizeScale * (float)searchROI.left(), ResizeScale * (float)searchROI.top());
-				cv::Point2f searchROIBrCorner = cv::Point2f(ResizeScale * (float)searchROI.right(), ResizeScale * (float)searchROI.bottom());
-				
-				cv::rectangle(colorImgCV, tlCorner, brCorner, CV_RGB(0, 0, 255), 1, CV_AA);
-				cv::rectangle(colorImgCV, searchROITlCorner, searchROIBrCorner, CV_RGB(0, 255, 0), 1, CV_AA);
-				
-				std::vector<dlib::full_object_detection> shapes;
-				for (unsigned long i = 0; i < faces.size(); ++i)
-					shapes.push_back(pose_model(imgQuarter_dlib, faces[i]));
-
-				if (shapes.size() != 0)
+				for (int i = 0; i < detectedFaces.size(); i++)
 				{
-					for (int i = 0; i < shapes[0].num_parts(); i++)
+					if (detectedFaces.size() >= 1)
 					{
-						cv::Point2f landmarkPt = cv::Point2f(ResizeScale * shapes[0].part(i).x(), ResizeScale * shapes[0].part(i).y());
-						cv::circle(colorImgCV, landmarkPt, 0, CV_RGB(255, 0, 0), 3, CV_AA);
+						for (int i = 0; i < detectedFaces.size(); i++)
+						{
+							int area = detectedFaces[i].area();
+							if (area > largestArea)
+							{
+								largestAreaIdx = i;
+								largestArea = area;
+							}
+						}
 					}
-
-					frameCnt++;
-					cummulativeFPS += ((float)1000 / (float)interval.count());
-					averageFPS = cummulativeFPS / frameCnt;
-
-					std::cout << "Average FPS: " << averageFPS << std::endl;
 				}
+
+				cv::rectangle(colorImgCV, detectedFaces[largestAreaIdx], cv::Scalar(255, 0, 255));
+
 			}
+
+			frameCnt++;
+			cummulativeFPS += ((float)1000 / (float)interval.count());
+			averageFPS = cummulativeFPS / frameCnt;
+
+			std::cout << "Average FPS: " << averageFPS << std::endl;
 
 			cv::imshow("Image", colorImgCV);
 			cv::imshow("QuarterImage", grayImgCVQuarter);
