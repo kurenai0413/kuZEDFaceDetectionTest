@@ -1,5 +1,7 @@
-#include <sl/Camera.hpp>
 #include <chrono>
+#include <iostream>
+
+#include <sl/Camera.hpp>
 #include <dlib/opencv.h>
 #include <dlib/image_processing.h>
 #include <dlib/image_processing/frontal_face_detector.h>
