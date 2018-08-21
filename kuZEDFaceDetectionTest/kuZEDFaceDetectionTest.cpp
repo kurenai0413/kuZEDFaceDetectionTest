@@ -5,7 +5,7 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <opencv2/opencv.hpp>
 
-#define ResizeScale		  3
+#define ResizeScale		  2
 #define SearchRegionScale 0.2
 
 void main()
@@ -29,7 +29,7 @@ void main()
 
 	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
 	dlib::shape_predictor pose_model;
-	dlib::deserialize("shape_predictor_5_face_landmarks.dat") >> pose_model;
+	dlib::deserialize("shape_predictor_68_face_landmarks.dat") >> pose_model;
 
 	cv::Rect leftImgRect(0, 0, 0.5 * capWidth, capHeight);
 
