@@ -94,10 +94,12 @@ void main()
 				int originalFaceWidth  = (int)abs(faces[0].left() - faces[0].right());
 				int originalFaceHeight = (int)abs(faces[0].top() - faces[0].bottom());
 
-				dlib::rectangle searchROI((long)(faces[0].left() - SearchRegionScale * originalFaceWidth), 
-										  (long)(faces[0].top() - SearchRegionScale * originalFaceHeight),
-										  (long)(faces[0].right() + SearchRegionScale * originalFaceWidth), 
-										  (long)(faces[0].bottom() + SearchRegionScale * originalFaceHeight));
+				float l = faces[0].left() - SearchRegionScale * originalFaceWidth;
+				float t = faces[0].top() - SearchRegionScale * originalFaceHeight;
+				float r = faces[0].right() + SearchRegionScale * originalFaceWidth;
+				float b = faces[0].bottom() + SearchRegionScale * originalFaceHeight;
+
+				dlib::rectangle searchROI((long)l, (long)t, (long)r, (long)b);
 
 				cv::Point2f searchROITlCorner = cv::Point2f(ResizeScale * (float)searchROI.left(), ResizeScale * (float)searchROI.top());
 				cv::Point2f searchROIBrCorner = cv::Point2f(ResizeScale * (float)searchROI.right(), ResizeScale * (float)searchROI.bottom());
