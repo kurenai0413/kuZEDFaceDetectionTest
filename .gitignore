@@ -240,3 +240,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/kuZEDFaceDetectionTest/Models
+/kuZEDFaceDetectionTest/shape_predictor_68_face_landmarks.dat
+/kuZEDFaceDetectionTest/shape_predictor_5_face_landmarks.dat
