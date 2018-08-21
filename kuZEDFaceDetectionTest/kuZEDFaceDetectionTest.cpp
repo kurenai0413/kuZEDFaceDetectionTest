@@ -7,7 +7,7 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <opencv2/opencv.hpp>
 
-#define ResizeScale		  4
+#define ResizeScale		  7
 #define SearchRegionScale 0.2
 
 cv::Mat slMat2cvMat(sl::Mat &input) {
@@ -62,6 +62,10 @@ void main()
 	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
 	dlib::shape_predictor pose_model;
 	dlib::deserialize("shape_predictor_5_face_landmarks.dat") >> pose_model;
+
+	int frameCnt = 0;
+	float cummulativeFPS = 0;
+	float averageFPS;
 
 	while (true)
 	{
@@ -118,6 +122,12 @@ void main()
 						cv::Point2f landmarkPt = cv::Point2f(ResizeScale * shapes[0].part(i).x(), ResizeScale * shapes[0].part(i).y());
 						cv::circle(colorImgCV, landmarkPt, 0, CV_RGB(255, 0, 0), 3, CV_AA);
 					}
+
+					frameCnt++;
+					cummulativeFPS += ((float)1000 / (float)interval.count());
+					averageFPS = cummulativeFPS / frameCnt;
+
+					std::cout << "Average FPS: " << averageFPS << std::endl;
 				}
 			}
 
