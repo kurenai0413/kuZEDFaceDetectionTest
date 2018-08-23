@@ -7,7 +7,7 @@
 #include <dlib/image_processing/frontal_face_detector.h>
 #include <opencv2/opencv.hpp>
 
-#define ResizeScale		  7
+#define ResizeScale		  4
 #define SearchRegionScale 0.2
 
 cv::Mat slMat2cvMat(sl::Mat &input) {
