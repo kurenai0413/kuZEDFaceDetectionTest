@@ -32,6 +32,8 @@ cv::Mat slMat2cvMat(sl::Mat &input) {
 
 void main()
 {
+	typedef dlib::scan_fhog_pyramid<dlib::pyramid_down<6>> image_scanner_type;
+
 	sl::Camera				zedCam;
 	sl::InitParameters		initParams;
 
@@ -60,6 +62,8 @@ void main()
 	timeStamp[0] = std::chrono::high_resolution_clock::now();
 
 	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
+	dlib::object_detector<image_scanner_type> hogFaceDetector;
+	dlib::deserialize("face_detector_0824ku.svm") >> hogFaceDetector;
 	dlib::shape_predictor pose_model;
 	dlib::deserialize("shape_predictor_5_face_landmarks.dat") >> pose_model;
 
@@ -88,7 +92,8 @@ void main()
 			dlib::cv_image<uchar> imgQuarter_dlib(grayImgCVQuarter);
 
 			// Detect faces 
-			std::vector<dlib::rectangle> faces = detector(imgQuarter_dlib);
+			//std::vector<dlib::rectangle> faces = detector(imgQuarter_dlib);
+			std::vector<dlib::rectangle> faces = hogFaceDetector(imgQuarter_dlib);
 
 			if (faces.size() != 0)
 			{

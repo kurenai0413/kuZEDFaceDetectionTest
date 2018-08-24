@@ -245,3 +245,4 @@ ModelManifest.xml
 /kuZEDFaceDetectionTest/shape_predictor_5_face_landmarks.dat
 /kuZEDFaceDetectionTest/Images_Right
 /kuZEDFaceDetectionTest/Images_Left
+/kuZEDFaceDetectionTest/face_detector_0824ku.svm
