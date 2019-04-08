@@ -246,3 +246,13 @@ ModelManifest.xml
 /kuZEDFaceDetectionTest/Images_Right
 /kuZEDFaceDetectionTest/Images_Left
 /kuZEDFaceDetectionTest/face_detector_0824ku.svm
+/kuZEDFaceDetectionTest/Images_Left_2
+/kuZEDFaceDetectionTest/Images_Right_2
+/kuZEDFaceDetectionTest/InputData/face_detector_20180828ku.svm
+/kuZEDFaceDetectionTest/InputData/face_detector_0824ku.svm
+/kuZEDFaceDetectionTest/TestImages
+/kuZEDFaceDetectionTest/Dlib_x64d.props
+/kuZEDFaceDetectionTest/30_left.png
+/kuZEDFaceDetectionTest/2_left.png
+/kuZEDFaceDetectionTest/sp_exaple.dat
+/kuZEDFaceDetectionTest/sp.dat

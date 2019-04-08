@@ -38,8 +38,8 @@ void main()
 	sl::InitParameters		initParams;
 
 	initParams.camera_resolution = sl::RESOLUTION_HD720;
-	initParams.depth_mode = sl::DEPTH_MODE_PERFORMANCE;
-	initParams.coordinate_units = sl::UNIT_MILLIMETER;
+	initParams.depth_mode		 = sl::DEPTH_MODE_PERFORMANCE;
+	initParams.coordinate_units  = sl::UNIT_MILLIMETER;
 
 	sl::ERROR_CODE	err = zedCam.open(initParams);
 
