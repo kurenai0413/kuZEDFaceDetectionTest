@@ -248,3 +248,4 @@ ModelManifest.xml
 /kuZEDFaceDetectionTest/Dlib_x64.props
 /kuZEDFaceDetectionTest/CUDA_x64d.props
 /kuZEDFaceDetectionTest/CUDA_x64.props
+/kuZEDFaceDetectionTest/face_detector_0824ku.svm

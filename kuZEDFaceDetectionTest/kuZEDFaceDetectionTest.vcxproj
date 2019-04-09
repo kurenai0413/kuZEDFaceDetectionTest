@@ -66,10 +66,8 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="ZEDSDK_x64.props" />
-    <Import Project="CUDA_x64.props" />
-    <Import Project="Dlib_x64.props" />
-    <Import Project="OpenCV_x64.props" />
+    <Import Project="..\..\..\..\Libraries\PropertySheet\Dlib1916_vc15_x64.props" />
+    <Import Project="..\..\..\..\Libraries\PropertySheet\OpenCV341_vc15_x64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
